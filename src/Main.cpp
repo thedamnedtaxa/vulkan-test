@@ -24,5 +24,5 @@ int WINAPI WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance, LPSTR lpCmdLine,
 #ifndef NDEBUG
 	Console::Destroy();
 #endif 
-	return 0;
+	return EXIT_SUCCESS;
 }
