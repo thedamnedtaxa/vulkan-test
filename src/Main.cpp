@@ -3,7 +3,6 @@
 #include "Console.hpp"
 int WINAPI WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-	const char* test = "VKTEST";
 #ifndef NDEBUG
 	Console::Init();
 #endif 
