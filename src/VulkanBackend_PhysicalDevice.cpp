@@ -4,7 +4,7 @@
 #include <vector>
 bool QueueFamilyIndices::IsComplete()
 {
-	return graphicsFamily.has_value();
+	return graphicsFamily.has_value() && presentFamily.has_value();
 }
 void VulkanBackend::PickPhysicalDevice()
 {
@@ -54,7 +54,11 @@ QueueFamilyIndices VulkanBackend::FindQueueFamilies(VkPhysicalDevice device) {
 		{
 			indices.graphicsFamily = i;
 		}
-
+		VkBool32 presentSupport = false;
+		vkGetPhysicalDeviceSurfaceSupportKHR(device, i, surface, &presentSupport);
+		if (presentSupport) {
+			indices.presentFamily = i;
+		}
 		if (indices.IsComplete())
 		{
 			break;

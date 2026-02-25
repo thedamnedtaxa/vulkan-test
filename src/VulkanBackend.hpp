@@ -13,7 +13,7 @@ extern const uint32_t VALIDATION_LAYER_COUNT;
 struct QueueFamilyIndices
 {
 	std::optional<uint32_t> graphicsFamily;
-
+	std::optional<uint32_t> presentFamily;
 	bool IsComplete();
 };
 class VulkanBackend
@@ -28,6 +28,10 @@ private:
 	VkInstance instance;
 	VkDebugUtilsMessengerEXT debugMessenger;
 	VkPhysicalDevice physicalDevice;
+	VkDevice device;
+	VkQueue graphicsQueue;
+	VkSurfaceKHR surface;
+	VkQueue presentQueue;
 	void CreateInstance();
 	bool CheckValidationLayerSupport();
 	void SetupDebugMessenger();
@@ -40,4 +44,6 @@ private:
 	void PickPhysicalDevice();
 	bool IsDeviceSuitable(VkPhysicalDevice device);
 	QueueFamilyIndices FindQueueFamilies(VkPhysicalDevice device);
+	void CreateLogicalDevice();
+	void CreateSurface();
 };
