@@ -1,5 +1,6 @@
 #include "VulkanBackend.hpp"
-VulkanBackend::VulkanBackend() : instance(nullptr),debugMessenger(nullptr)
+VulkanBackend::VulkanBackend() : instance(nullptr),debugMessenger(nullptr),
+physicalDevice(VK_NULL_HANDLE)
 {
 
 }
@@ -11,6 +12,7 @@ void VulkanBackend::Init()
 {
 	CreateInstance();
 	SetupDebugMessenger();
+	PickPhysicalDevice();
 }
 void VulkanBackend::RenderFrame()
 {
