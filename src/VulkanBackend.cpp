@@ -18,6 +18,7 @@ void VulkanBackend::Init()
 	PickPhysicalDevice();
 	CreateLogicalDevice();
 	CreateSwapChain();
+	CreateImageViews();
 }
 void VulkanBackend::RenderFrame()
 {
@@ -25,6 +26,10 @@ void VulkanBackend::RenderFrame()
 }
 void VulkanBackend::Shutdown()
 {
+	for (auto imageView : swapChainImageViews)
+	{
+		vkDestroyImageView(device, imageView, nullptr);
+	}
 	if (swapChain) vkDestroySwapchainKHR(device, swapChain, nullptr);
 	if (device) vkDestroyDevice(device, nullptr);
 #ifndef NDEBUG
