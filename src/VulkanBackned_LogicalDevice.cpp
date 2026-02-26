@@ -28,7 +28,8 @@ void VulkanBackend::CreateLogicalDevice()
 	createInfo.queueCreateInfoCount = static_cast<uint32_t>(queueCreateInfos.size());
 	createInfo.pQueueCreateInfos = queueCreateInfos.data();
 	createInfo.pEnabledFeatures = &deviceFeatures;
-	createInfo.enabledExtensionCount = 0;
+	createInfo.enabledExtensionCount = static_cast<uint32_t>(DEVICE_EXTENSIONS.size());
+	createInfo.ppEnabledExtensionNames = DEVICE_EXTENSIONS.data();
 	createInfo.enabledLayerCount = VALIDATION_LAYER_COUNT;
 #ifndef NDEBUG
 	createInfo.ppEnabledLayerNames = VALIDATION_LAYERS;

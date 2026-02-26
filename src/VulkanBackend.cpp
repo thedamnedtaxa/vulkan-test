@@ -2,7 +2,7 @@
 VulkanBackend::VulkanBackend() : instance(nullptr),debugMessenger(nullptr),
 physicalDevice(VK_NULL_HANDLE),device(nullptr),
 graphicsQueue(nullptr),presentQueue(nullptr),
-surface(nullptr)
+surface(nullptr),swapChain(nullptr)
 {
 
 }
@@ -17,6 +17,7 @@ void VulkanBackend::Init()
 	CreateSurface();
 	PickPhysicalDevice();
 	CreateLogicalDevice();
+	CreateSwapChain();
 }
 void VulkanBackend::RenderFrame()
 {
@@ -24,6 +25,7 @@ void VulkanBackend::RenderFrame()
 }
 void VulkanBackend::Shutdown()
 {
+	if (swapChain) vkDestroySwapchainKHR(device, swapChain, nullptr);
 	if (device) vkDestroyDevice(device, nullptr);
 #ifndef NDEBUG
 	if (debugMessenger)

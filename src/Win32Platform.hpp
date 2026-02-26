@@ -1,6 +1,7 @@
 #pragma once
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+#include <cstdint>
 class Win32Platform
 {
 public:
@@ -14,11 +15,15 @@ public:
 	HWND GetHWND();
 	bool CheckClose();
 	void CloseWindow();
+	uint32_t GetWindowWidth();
+	uint32_t GetWindowHeight();
 private:
 	static LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM);
 	Win32Platform();
 	~Win32Platform();
 	HWND hWnd;
 	MSG msg;
+	static uint32_t width;
+	static uint32_t height;
 	bool windowClose;
 };

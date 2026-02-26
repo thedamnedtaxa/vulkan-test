@@ -1,6 +1,8 @@
 #include "Win32Platform.hpp"
 #include "Input.hpp"
 #include <inttypes.h>
+uint32_t Win32Platform::width = 800;
+uint32_t Win32Platform::height = 800;
 Win32Platform::Win32Platform() : hWnd(nullptr),msg(nullptr),windowClose(false)
 {
 
@@ -72,6 +74,14 @@ HWND Win32Platform::GetHWND()
 {
 	return this->hWnd;
 }
+uint32_t Win32Platform::GetWindowWidth()
+{
+	return width;
+}
+uint32_t Win32Platform::GetWindowHeight()
+{
+	return height;
+}
 LRESULT CALLBACK Win32Platform::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (uMsg)
@@ -86,6 +96,12 @@ LRESULT CALLBACK Win32Platform::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
 	case WM_KEYUP:
 		Input::Update();
 		return 0;
+	case WM_SIZE:
+		width = LOWORD(lParam);
+		height = HIWORD(lParam);
+		if (width != 0 && height != 0)
+		{
+		}
 	default:
 		return DefWindowProc(hWnd, uMsg, wParam, lParam);
 	}

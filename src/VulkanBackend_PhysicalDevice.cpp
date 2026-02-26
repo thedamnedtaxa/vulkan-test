@@ -2,6 +2,8 @@
 #include "Console.hpp"
 #include <iostream>
 #include <vector>
+#include <set>
+#include <string>
 bool QueueFamilyIndices::IsComplete()
 {
 	return graphicsFamily.has_value() && presentFamily.has_value();
@@ -36,7 +38,16 @@ void VulkanBackend::PickPhysicalDevice()
 bool VulkanBackend::IsDeviceSuitable(VkPhysicalDevice device)
 {
 	QueueFamilyIndices indices = FindQueueFamilies(device);
-	return indices.IsComplete();
+
+	bool extensionsSupported = CheckDeviceExtensionSupport(device);
+
+	bool swapChainAdequate = false;
+	if (extensionsSupported)
+	{
+		SwapChainSupportDetails swapChainSupport = QuerySwapChainSupport(device);
+		swapChainAdequate = !swapChainSupport.formats.empty() && !swapChainSupport.presentModes.empty();
+	}
+	return indices.IsComplete() && extensionsSupported && swapChainAdequate;
 }
 QueueFamilyIndices VulkanBackend::FindQueueFamilies(VkPhysicalDevice device) {
 	QueueFamilyIndices indices;
@@ -67,4 +78,18 @@ QueueFamilyIndices VulkanBackend::FindQueueFamilies(VkPhysicalDevice device) {
 		i++;
 	}
 	return indices;
+}
+bool VulkanBackend::CheckDeviceExtensionSupport(VkPhysicalDevice device)
+{
+	uint32_t extensionCount;
+	vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, nullptr);
+	std::vector<VkExtensionProperties> availableExtensions(extensionCount);
+	vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, availableExtensions.data());
+	std::set<std::string> requiredExtensions(DEVICE_EXTENSIONS.begin(), DEVICE_EXTENSIONS.end());
+
+	for (const auto& extension : availableExtensions)
+	{
+		requiredExtensions.erase(extension.extensionName);
+	}
+	return requiredExtensions.empty();
 }
